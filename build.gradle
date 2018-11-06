@@ -1,0 +1,60 @@
+defaultTasks 'clean','test','aggregate'
+
+repositories {
+    clear()
+    maven {
+        credentials {
+            username artifactoryUsername
+            password artifactoryPassword
+        }
+        url "https://artifactory.intranet.db.com/artifactory/mvn-libs-release"
+    }
+}
+
+buildscript {
+    repositories {
+        clear()
+        maven {
+            credentials {
+                username artifactoryUsername
+                password artifactoryPassword
+            }
+            url "https://artifactory.intranet.db.com/artifactory/mvn-libs-release"
+        }
+	}
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.14")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+apply from: "$rootDir/gradle/libraries.gradle"
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile libs.slf4jApi,
+            libs.logback
+
+    testCompile libs.test.serenity.core,
+            libs.test.serenity.screenplay,
+            libs.test.serenity.screenplayWebdriver,
+            libs.test.serenity.cucumber,
+            libs.test.junit,
+            libs.test.assertj,
+            libs.test.junitParams
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+gradle.startParameter.continueOnFailure = true
+
+test.finalizedBy(aggregate)
