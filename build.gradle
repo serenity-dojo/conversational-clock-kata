@@ -1,6 +1,9 @@
 defaultTasks 'clean','test','aggregate'
 
 repositories {
+    mavenLocal()
+    jcenter()
+/*
     clear()
     maven {
         credentials {
@@ -9,9 +12,15 @@ repositories {
         }
         url "https://artifactory.intranet.db.com/artifactory/mvn-libs-release"
     }
+*/
 }
 
 buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+/*
     repositories {
         clear()
         maven {
@@ -22,6 +31,7 @@ buildscript {
             url "https://artifactory.intranet.db.com/artifactory/mvn-libs-release"
         }
 	}
+    */
     dependencies {
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.14")
     }
